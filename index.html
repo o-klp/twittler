@@ -10,16 +10,24 @@
       $(document).ready(function(){
         var $body = $('body');
         $body.html('');
+        var title = $("<h1>Twittler</h1>").css({"margin-left":"auto", "margin-right":"auto", "width":"50%"});
+        $(title).appendTo($body);
 
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
-        }
-
+          var index = streams.home.length - 1;
+            while(index >= 0){
+              var tweet = streams.home[index];
+              var usr = $("<ul></ul>");
+              var $tweet = $('<p></p>');
+              var timeOf = $("<ul></ul>");
+              $tweet.text(tweet.message).css({"text-align":"center", "width":"50%", "margin-left":"auto", "margin-right":"auto"});
+              $(usr).text("@" + tweet.user).css({"text-align":"left"});
+              $(timeOf).text(tweet.created_at).css({"margin-left":"350px"});
+              $(timeOf).appendTo($tweet);
+              $(usr).prependTo($tweet);
+              $tweet.css({"border-style":"solid", "border-width":"5px", "border-color":"grey"});
+              $tweet.appendTo($body);
+              index -= 1;
+            }
       });
 
     </script>
