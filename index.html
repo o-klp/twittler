@@ -3,6 +3,22 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <style type="text/css">
+    .underline {
+      text-decoration: underline
+    }
+    .center {
+      text-align: center
+    }
+    .placeleft {
+      margin-left: 330px
+    }
+    .border{
+      border-style: solid;
+      border-width: 5px;
+      border-color: grey;
+    }
+    </style>
   </head>
   <body>
     <script>
@@ -10,15 +26,10 @@
       $(document).ready(function(){
         var $body = $('body');
         $body.html('');
-        var title = $("<h1>Twittler</h1>").css({"text-align":"center"});
-        var button = $('<button>Refresh Feed</button>').css({"margin-left":"330px"});
-        var feed = $('<p> Beginning </p>').css({"text-align":"center"});
-
-        $(title).appendTo($body);
-        $(button).appendTo($body);
-        $(feed).appendTo($body);
-
-        $("button").on('click', function() {
+        var title = $("<h1>Twittler</h1>").addClass('center');
+        var button = $('<button>Refresh Feed</button>').addClass('placeleft');
+        var feed = $('<p> Beginning </p>').addClass('center');
+        var refresh = function() {
           $("ul").remove();
           var index = streams.home.length - 1;
             while(index >= 0){
@@ -28,14 +39,20 @@
               var timeOf = $("<ul></ul>");
               $tweet.text(tweet.message).css({"text-align":"center", "width":"50%", "margin-left":"auto", "margin-right":"auto"});
               $(usr).text("@" + tweet.user).css({"text-align":"left", "margin-bottom": "10px"});
-              $(timeOf).text(tweet.created_at).css({"margin-left":"350px", "margin-top": "10px"});
+              $(timeOf).text(tweet.created_at).css({"text-align":"right", "margin-top": "10px"});
               $(timeOf).appendTo($tweet);
               $(usr).prependTo($tweet);
-              $tweet.css({"border-style":"solid", "border-width":"5px", "border-color":"grey"});
+              $tweet.addClass('border');
               $(feed).before($tweet);
               index -= 1;
             }
-        });
+        }
+
+        $(title).appendTo($body);
+        $(button).appendTo($body);
+        $(feed).appendTo($body);
+        $("button").on('click', refresh);
+        refresh();
       });
 
     </script>
