@@ -32,6 +32,8 @@
         var title = $("<h1>Twittler</h1>").addClass('center');
         var button = $('<button>Refresh Feed</button>').addClass('placeleft');
         var feed = $('<ul> Beginning </ul>').addClass('center');
+
+        //refresh function removes all currently displayed tweets and then displays every tweet in the stream object
         var refresh = function() {
           $('p').remove();
           var index = streams.home.length - 1;
@@ -39,28 +41,37 @@
               var tweet = streams.home[index];
               var usr = $("<ul></ul>");
               var $tweet = $('<p></p>');
-              var timeOf = $("<ul></ul>");
-              $tweet.text(tweet.message).css({"text-align":"center", "width":"50%", "margin-left":"auto", "margin-right":"auto"});
-              $(usr).text("@" + tweet.user).css({"text-align":"left"});
-              $(timeOf).text(tweet.created_at).css({"text-align":"right"});
-              $(timeOf).appendTo($tweet);
-              $(usr).prependTo($tweet);
-              $tweet.addClass(tweet.user);
-              $tweet.addClass('border');
-              $tweet.on('mouseenter', 'ul', function() {$(this).toggleClass('underline');})
-              $tweet.on('mouseleave', 'ul', function() {$(this).toggleClass('underline');})
+              var timeOf = $("<ul id='timestamp'></ul>");
+
+              $tweet.text(tweet.message).css({"text-align":"center", "width":"50%", "margin-left":"auto", "margin-right":"auto"})
+
+              //sets the username and adds it as a class to the tweet
+              //adds on click function to hide all tweets not by selected user
+              //displays username at top left of tweet
+              $(usr).text("@" + tweet.user).css({"text-align":"left"})
+              $tweet.addClass(tweet.user)
+              $(usr).prependTo($tweet)
               usr.on('click', function(){
                 var username = $(this).parent().attr('class');
-                var test = $('p').first();
+                var currentTweet = $('p').first();
                 for(var i = 0; i < ($('p').length); i++){
-                  if(!test.hasClass(username)){
-                    test.toggleClass('hidden');
+                  if(!currentTweet.hasClass(username)){
+                    currentTweet.toggleClass('hidden')
                   }
-                  test = test.next()
+                  currentTweet = currentTweet.next()
                 }
               });
 
-              $(feed).before($tweet);
+              //displays time created at bottom right of tweet
+              $(timeOf).text(tweet.created_at).css({"text-align":"right"})
+              $(timeOf).appendTo($tweet)
+
+              //underlines username & timestamp when they are moused over
+              //adds border to tweet and adds tweet to DOM
+              $tweet.addClass('border')
+              $tweet.on('mouseenter', 'ul', function() {$(this).toggleClass('underline');})
+              $tweet.on('mouseleave', 'ul', function() {$(this).toggleClass('underline');})
+              $(feed).before($tweet)
               index -= 1;
             }
         }
@@ -68,6 +79,8 @@
         $(title).appendTo($body);
         $(button).appendTo($body);
         $(feed).appendTo($body);
+
+        //refresh() called when button clicked and once when document is ready
         $("button").on('click', refresh);
         refresh();
       });
